@@ -74,25 +74,33 @@ class DisplayUsers extends StatelessWidget {
                 } else if (snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done) {
           
                   if (snapshot.hasError) {
-                    print(snapshot.error);
-                    return const Text('Error');
+                    
+                    return const Text('Error: ');
           
                   } else if (snapshot.hasData) {
 
-                    return DataTable(
-                      horizontalMargin: 0,
-                      columnSpacing: 16.0,
-                      columns: [
-                        tableHeader( "Full name" ),
-                        tableHeader( "Phone number" ),
-                        tableHeader( "Age group" ),
-                        tableHeader( "Locality" ),
-                        tableHeader( "Country" ),
-                      ], 
-                      rows: List.generate(
-                        snapshot.data!["counts"], 
-                        (index) => usersInfo(snapshot.data!["users"][index]))
-                    );
+                    if ( snapshot.data!["counts"] == 0 ) {
+
+                      return Text( "No users" );
+
+                    } else {
+                      
+                      return DataTable(
+                        horizontalMargin: 0,
+                        columnSpacing: 16.0,
+                        columns: [
+                          tableHeader( "Full name" ),
+                          tableHeader( "Phone number" ),
+                          tableHeader( "Gender" ),
+                          tableHeader( "Age group" ),
+                          tableHeader( "Locality" ),
+                          tableHeader( "Country" ),
+                        ], 
+                        rows: List.generate(
+                          snapshot.data!["counts"], 
+                          (index) => usersInfo(snapshot.data!["users"][index]))
+                      );
+                    }
           
                   } else {
           
@@ -140,6 +148,9 @@ class DisplayUsers extends StatelessWidget {
         ),
         DataCell(
           Text(userInfo["phone"].toString())
+        ),
+        DataCell(
+          Text(userInfo["gender"].toString())
         ),
         DataCell(
           Text(userInfo["ageGroup"].toString())

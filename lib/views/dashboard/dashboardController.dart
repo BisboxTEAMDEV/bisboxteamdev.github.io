@@ -13,7 +13,7 @@ class DashboardController {
   DashboardController();
 
   numberOfUsers() async{
-    print("NumberofUsers Stream");
+    
     var response;
     try {
       response = await ApiServices.getAllUsers();
@@ -60,8 +60,6 @@ class DashboardController {
   generatingPieChartSection ( AppModel model, TextStyle textStyle ) {
 
     List<PieChartSectionData>? pieChartSectionsData;
-  
-    print(model.getUsersPerCities());
 
     // Generate a list of PieChartSection
     pieChartSectionsData = List<PieChartSectionData>.generate(model.getUsersPerCities().length, (index) {

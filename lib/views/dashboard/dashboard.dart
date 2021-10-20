@@ -97,7 +97,6 @@ class _DashboardState extends State<Dashboard> {
 
                               return CircularProgressIndicator();
                             } else {
-                              print(model.getUsersPerCities());
 
                               // Generate a list of PieChartSection
                               var generatedPieChartSection = dashboardController.generatingPieChartSection( model, chartSectionTitleStyle );
