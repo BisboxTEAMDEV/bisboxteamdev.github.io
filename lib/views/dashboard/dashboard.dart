@@ -5,11 +5,11 @@ import 'package:giz_admin_dashboard/model/appModel.dart';
 import 'package:giz_admin_dashboard/model/user.dart';
 import 'package:giz_admin_dashboard/reusableComponents/constants.dart';
 import 'package:giz_admin_dashboard/reusableComponents/displayUsers.dart';
+import 'package:giz_admin_dashboard/reusableComponents/userChart.dart';
 import 'package:giz_admin_dashboard/reusableComponents/userWidget.dart';
 import 'package:giz_admin_dashboard/reusableComponents/header.dart';
-import 'package:giz_admin_dashboard/reusableComponents/infoCard.dart';
 import 'package:giz_admin_dashboard/services/apiServices.dart';
-import 'package:giz_admin_dashboard/reusableMethods/usersMethods.dart';
+import 'package:giz_admin_dashboard/views/dashboard/dashboardController.dart';
 import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
@@ -21,21 +21,16 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  // late UsersMethods usersMethods;
+  DashboardController dashboardController = DashboardController();
   
-  Future<Map<String, dynamic>> numberOfUsers() async{
-    print("NumberofUsers Stream");
-    var response = await ApiServices.getAllUsers();
-    Provider.of<AppModel>(context, listen: false).updateNumberOfUsers( response["counts"]);
-    Provider.of<AppModel>(context, listen: false).updateCurrentUserUI( response );
-    return response;
-  }
+  
 
 
   @override
   void initState() {
     super.initState();
-    numberOfUsers();
+    dashboardController.numberOfUsers();
+    dashboardController.getUsersPerCity();
   }
 
   @override
@@ -56,6 +51,8 @@ class _DashboardState extends State<Dashboard> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                // Left side of dashboard
                 Expanded(
                   flex: 5,
                   child: Column(
@@ -71,7 +68,8 @@ class _DashboardState extends State<Dashboard> {
                         listenableStream: appModel.onCurrentUsersChanged,
                         refresh: () async{
 
-                         await numberOfUsers();
+                         await dashboardController.numberOfUsers();
+                         await dashboardController.getUsersPerCity();
                         },
                       ),
                     ],
@@ -83,7 +81,7 @@ class _DashboardState extends State<Dashboard> {
                 Expanded(
                   flex: 2,
                   child: Container(
-                    height: 500,
+                    // height: 500,
                     padding: EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                       color: secondaryColor,
@@ -91,34 +89,24 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     child: Column(
                       children: [
-                        
-                        Text(
-                          "Number of users",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500
-                          ),
-                        ),
-                        SizedBox(height: 32,),
-
                         Consumer<AppModel>(
                           builder: ( context, model, child ) {
 
-                            return SizedBox(
-                              height: 200,
-                              child: PieChart(
-                                PieChartData(
-                                  sections: [
-                                    PieChartSectionData(
-                                      value: model.getNumberOfUsers() == null ? 1 : model.getNumberOfUsers(),
-                                      color: redColor,
-                                    )
-                                  ]
-                                )
-                              ),
-                            );
+                            // Verifying if the cities is not yet gotten
+                            if ( model.getUsersPerCities() == null ) {
+
+                              return CircularProgressIndicator();
+                            } else {
+                              print(model.getUsersPerCities());
+
+                              // Generate a list of PieChartSection
+                              var generatedPieChartSection = dashboardController.generatingPieChartSection( model, chartSectionTitleStyle );
+
+                              // Display a pie charts of users information
+                              return UserChart(pieChartSectionsData: generatedPieChartSection);
+                            }
                           },
-                        )
+                        ),
                       ],
                     ),
                   ),

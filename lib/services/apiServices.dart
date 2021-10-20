@@ -17,4 +17,17 @@ class ApiServices {
 
     return allUsersMap;
   }
+
+  static Future<Map<String, dynamic>> getUsersPerCity() async {
+
+    var response = await http.get( 
+      Uri.parse(usersPerCity),
+      headers: {
+        "Content-Type": "Application/json; Charset=UTF-8"
+      },
+    );
+    var usersPerCityMap = jsonDecode(response.body);
+
+    return usersPerCityMap;
+  }
 }
