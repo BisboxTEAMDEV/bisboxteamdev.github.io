@@ -36,7 +36,7 @@ class InfoCard extends StatelessWidget {
         Text(
           "Users",
           style: TextStyle(
-            fontSize: 21,
+            fontSize: 18,
             fontWeight: FontWeight.bold
           ),
         ),
@@ -45,7 +45,7 @@ class InfoCard extends StatelessWidget {
           "Total users: ${totalUsers == "null" ? "..." : totalUsers}",
           style: TextStyle(
 
-            fontSize: 16,
+            // fontSize: 16,
             fontWeight: FontWeight.w400
           ),
         )

@@ -7,12 +7,14 @@ class DisplayUsers extends StatelessWidget {
   Stream<Map<String, dynamic>>? listenableStream;
   VoidCallback? refresh;
   double width;
+  double tableHeaderFontSize;
 
   DisplayUsers({
     Key? key,
     required this.listenableStream,
     required this.width,
-    this.refresh
+    this.refresh,
+    this.tableHeaderFontSize = 21.0,
     
   }) : super(key: key);
 
@@ -85,20 +87,23 @@ class DisplayUsers extends StatelessWidget {
 
                     } else {
                       
-                      return DataTable(
-                        horizontalMargin: 0,
-                        columnSpacing: 16.0,
-                        columns: [
-                          tableHeader( "Full name" ),
-                          tableHeader( "Phone number" ),
-                          tableHeader( "Gender" ),
-                          tableHeader( "Age group" ),
-                          tableHeader( "Locality" ),
-                          tableHeader( "Country" ),
-                        ], 
-                        rows: List.generate(
-                          snapshot.data!["counts"], 
-                          (index) => usersInfo(snapshot.data!["users"][index]))
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          horizontalMargin: 0,
+                          columnSpacing: 16.0,
+                          columns: [
+                            tableHeader( "Full name", tableHeaderFontSize ),
+                            tableHeader( "Phone number", tableHeaderFontSize ),
+                            tableHeader( "Gender", tableHeaderFontSize ),
+                            tableHeader( "Age group", tableHeaderFontSize ),
+                            tableHeader( "Locality", tableHeaderFontSize ),
+                            tableHeader( "Country", tableHeaderFontSize ),
+                          ], 
+                          rows: List.generate(
+                            snapshot.data!["counts"], 
+                            (index) => usersInfo(snapshot.data!["users"][index]))
+                        ),
                       );
                     }
           
@@ -121,12 +126,13 @@ class DisplayUsers extends StatelessWidget {
 }
 
 
-  DataColumn tableHeader( String? title ) {
+  DataColumn tableHeader( String? title, double fontSize ) {
     return DataColumn(
       label: Text(
         title!,
         style: TextStyle(
-          fontSize: 21,
+          overflow: TextOverflow.ellipsis,
+          fontSize: fontSize,
           color: blueColor,
           fontWeight: FontWeight.w500
         ),

@@ -1,7 +1,9 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:giz_admin_dashboard/model/appModel.dart';
+import 'package:giz_admin_dashboard/responsive.dart';
 import 'package:giz_admin_dashboard/reusableComponents/constants.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 class UserChart extends StatelessWidget {
@@ -14,27 +16,32 @@ class UserChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
     var appModel = Provider.of<AppModel>(context, listen: false);
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: Responsive.isMobile(context) ? MainAxisAlignment.center : MainAxisAlignment.start,
       children: [
 
         // Pie chart diagram and label
         Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              height: 200,
-              width: 200,
-              child: PieChart(
-                PieChartData(
-                  startDegreeOffset: -90,
-                  sectionsSpace: 0,
-                  centerSpaceRadius: 50,
-                  sections: pieChartSectionsData
-                )
+            Responsive(
+              desktop: Chart(
+                pieChartSectionsData: pieChartSectionsData,
               ),
+              tablet: Chart(
+                pieChartSectionsData: pieChartSectionsData,
+                width: 120,
+              ),
+              mobile: Chart(
+                pieChartSectionsData: pieChartSectionsData
+              ),
+            ),
+
+            SizedBox(
+              height: 8.0,
             ),
 
             Text(
@@ -42,14 +49,14 @@ class UserChart extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: blueColor
+                color: Colors.white
               ),
             )
           ],
         ),
 
         SizedBox(
-          width: 16.0,
+          width: 8.0,
         ),
 
         // Cities and colors
@@ -67,14 +74,14 @@ class UserChart extends StatelessWidget {
                 ),
 
                 SizedBox(
-                  width: 16.0,
+                  width: 8.0,
                 ),
 
                 Text(
                   appModel.getUsersPerCities()[index]["_id"],
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.w500
                   ),
                 )
@@ -83,23 +90,37 @@ class UserChart extends StatelessWidget {
 
           }),
         )
-        
-        // Row(
-        //   children: [
-        //     SizedBox.square(
-        //       child: appModel.getUsersPerCities(),
-        //     )
-        //     Text(
-        //       "Users per city",
-        //       overflow: TextOverflow.ellipsis,
-        //       style: TextStyle(
-        //         fontSize: 16,
-        //         fontWeight: FontWeight.w500
-        //       ),
-        //     ),
-        //   ],
-        // )
       ],
+    );
+  }
+}
+
+class Chart extends StatelessWidget {
+  const Chart({
+    Key? key,
+    this.centerSpaceRadius = 30,
+    required this.pieChartSectionsData, 
+    this.height = 130, 
+    this.width = 150,
+  }) : super(key: key);
+
+  final double centerSpaceRadius;
+  final List<PieChartSectionData> pieChartSectionsData;
+  final double height, width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      child: PieChart(
+        PieChartData(
+          startDegreeOffset: -90,
+          sectionsSpace: 0,
+          centerSpaceRadius: centerSpaceRadius,
+          sections: pieChartSectionsData
+        )
+      ),
     );
   }
 }

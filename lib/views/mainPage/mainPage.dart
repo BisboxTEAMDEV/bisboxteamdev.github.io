@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giz_admin_dashboard/responsive.dart';
 import 'package:giz_admin_dashboard/reusableComponents/sideBar.dart';
 import 'package:giz_admin_dashboard/views/dashboard/dashboard.dart';
 
@@ -13,9 +14,10 @@ class MainPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            Expanded(
-              child: SideBar(),
-            ),
+            if ( Responsive.isDesktop(context))
+              Expanded(
+                child: SideBar(),
+              ),
 
             Expanded(
 

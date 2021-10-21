@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:giz_admin_dashboard/model/appModel.dart';
 import 'package:giz_admin_dashboard/model/user.dart';
+import 'package:giz_admin_dashboard/responsive.dart';
 import 'package:giz_admin_dashboard/reusableComponents/constants.dart';
 import 'package:giz_admin_dashboard/reusableComponents/displayUsers.dart';
 import 'package:giz_admin_dashboard/reusableComponents/userChart.dart';
 import 'package:giz_admin_dashboard/reusableComponents/userWidget.dart';
 import 'package:giz_admin_dashboard/reusableComponents/header.dart';
 import 'package:giz_admin_dashboard/services/apiServices.dart';
+import 'package:giz_admin_dashboard/views/dashboard/components/chartsSection.dart';
 import 'package:giz_admin_dashboard/views/dashboard/dashboardController.dart';
 import 'package:provider/provider.dart';
 
@@ -57,14 +59,25 @@ class _DashboardState extends State<Dashboard> {
                   flex: 5,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: Responsive.isMobile(context) ? CrossAxisAlignment.center : CrossAxisAlignment.start,
                     children: [
-                      UserWidget(),
+                      Responsive(
+                        desktop: UserWidget(
+                          childAspectRatio: screenSize.width < 1400 ? 1 : 1.4,
+                        ),
+                        tablet: UserWidget(),
+                        mobile: UserWidget(
+                          crossAxisCount: screenSize.width < 650 ? 2 : 4,
+                          childAspectRatio: screenSize.width < 650 ? 1 : 1,
+                        ),
+                      ),
+
                       SizedBox(
                         height: 16,
                       ),
                       DisplayUsers(
                         width: screenSize.width,
+                        tableHeaderFontSize: Responsive.isTablet(context) ? 18 : Responsive.isMobile(context) ? 16 : 21,
                         listenableStream: appModel.onCurrentUsersChanged,
                         refresh: () async{
 
@@ -72,44 +85,30 @@ class _DashboardState extends State<Dashboard> {
                          await dashboardController.getUsersPerCity();
                         },
                       ),
+
+                      // On mobile display the chart section under the users section
+                      if ( Responsive.isMobile(context))
+                        SizedBox(
+                          height: 16,
+                        ),
+
+                      if ( Responsive.isMobile(context))
+                        ChartsSection(dashboardController: dashboardController)
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    // height: 500,
-                    padding: EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: secondaryColor,
-                      borderRadius: BorderRadius.all(Radius.circular(16.0))
-                    ),
-                    child: Column(
-                      children: [
-                        Consumer<AppModel>(
-                          builder: ( context, model, child ) {
 
-                            // Verifying if the cities is not yet gotten
-                            if ( model.getUsersPerCities() == null ) {
-
-                              return CircularProgressIndicator();
-                            } else {
-
-                              // Generate a list of PieChartSection
-                              var generatedPieChartSection = dashboardController.generatingPieChartSection( model, chartSectionTitleStyle );
-
-                              // Display a pie charts of users information
-                              return UserChart(pieChartSectionsData: generatedPieChartSection);
-                            }
-                          },
-                        ),
-                      ],
-                    ),
+                // On mobile remove the chart section on the left
+                if ( !Responsive.isMobile(context))
+                  SizedBox(
+                    width: 16,
                   ),
-                )
+
+                if ( !Responsive.isMobile(context))
+                  Expanded(
+                    flex: 2,
+                    child: ChartsSection(dashboardController: dashboardController),
+                  )
               ],
             )
           ],

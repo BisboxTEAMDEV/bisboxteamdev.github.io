@@ -5,8 +5,13 @@ import 'package:giz_admin_dashboard/reusableComponents/infoCard.dart';
 import 'package:provider/provider.dart';
 
 class UserWidget extends StatelessWidget {
+  final int crossAxisCount;
+  final double childAspectRatio;
+
   const UserWidget({
     Key? key,
+    this.crossAxisCount = 4,
+    this.childAspectRatio = 1
   }) : super(key: key);
 
   @override
@@ -16,9 +21,9 @@ class UserWidget extends StatelessWidget {
         shrinkWrap: true,
         itemCount: 1,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
+          crossAxisCount: crossAxisCount,
           crossAxisSpacing: 16,
-          childAspectRatio: 1.4
+          childAspectRatio: childAspectRatio
         ), 
         itemBuilder: (context, index) => Container(
           padding: EdgeInsets.all(16),

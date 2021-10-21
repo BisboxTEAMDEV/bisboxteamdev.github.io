@@ -69,7 +69,7 @@ class DashboardController {
         color: model.getChartSectionColors()[index], // Color to differentiate each city
         title: model.getUsersPerCities()[index]["count"].toString(), // Displaying the sum of users per city
         titleStyle: textStyle,
-        radius: 35
+        radius: 30
       );
 
     });

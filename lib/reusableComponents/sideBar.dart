@@ -29,7 +29,7 @@ class SideBar extends StatelessWidget {
                   "Welcome!",
                   style: TextStyle(
                     color: Colors.black87,
-                    fontSize: 32,
+                    fontSize: 24,
                     fontWeight: FontWeight.w900
                   ),
                 ),
@@ -76,13 +76,13 @@ class DrawerListTiles extends StatelessWidget {
       leading: SvgPicture.asset(
         imageLink,
         color: Provider.of<AppModel>(context).getDashboardSelected() ? Colors.white : Colors.black87,
-        height: 18,
+        height: 16,
       ),
       title: Text(
         title,
         style: TextStyle(
           color: Provider.of<AppModel>(context).getDashboardSelected() ? Colors.white : Colors.black87,
-          fontSize: 18
+          fontSize: 16
         ),
       ),
     );
