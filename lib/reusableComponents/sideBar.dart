@@ -13,37 +13,49 @@ class SideBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.symmetric(
-          horizontal: 16.0
+    return Container(
+      child: ClipRRect(
+        borderRadius: BorderRadius.horizontal(
+          right: Radius.circular(32.0)
         ),
-        children: [
-    
-          DrawerHeader(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Welcome!",
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900
-                  ),
-                ),
-              ],
-            )
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.symmetric(
+              horizontal: 16.0
+            ),
+            children: [
+        
+              DrawerHeader(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Welcome!",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900
+                      ),
+                    ),
+                  ],
+                )
+              ),
+        
+              Consumer<AppModel>(
+                builder: (context, model, child) {
+      
+                  return DrawerListTiles(
+                    title: "Dashboard",
+                    imageLink: "assets/fi-br-apps.svg",
+                    onTap: (){},
+                    selected: model.getDashboardSelected(),
+                  );
+                }
+              )
+            ],
           ),
-    
-          DrawerListTiles(
-            title: "Dashboard",
-            imageLink: "assets/fi-br-apps.svg",
-            onTap: (){},
-            selected: Provider.of<AppModel>(context).getDashboardSelected(),
-          )
-        ],
+        ),
       ),
     );
   }
@@ -75,13 +87,13 @@ class DrawerListTiles extends StatelessWidget {
       ),
       leading: SvgPicture.asset(
         imageLink,
-        color: Provider.of<AppModel>(context).getDashboardSelected() ? Colors.white : Colors.black87,
+        color: Colors.white,
         height: 16,
       ),
       title: Text(
         title,
         style: TextStyle(
-          color: Provider.of<AppModel>(context).getDashboardSelected() ? Colors.white : Colors.black87,
+          color: selected ? Colors.white : Colors.black,
           fontSize: 16
         ),
       ),

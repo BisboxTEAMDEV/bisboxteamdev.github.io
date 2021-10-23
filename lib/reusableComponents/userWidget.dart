@@ -18,11 +18,13 @@ class UserWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: GridView.builder(
+        physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: 1,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: crossAxisCount,
           crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
           childAspectRatio: childAspectRatio
         ), 
         itemBuilder: (context, index) => Container(

@@ -77,7 +77,7 @@ class _DashboardState extends State<Dashboard> {
                       ),
                       DisplayUsers(
                         width: screenSize.width,
-                        tableHeaderFontSize: Responsive.isTablet(context) ? 18 : Responsive.isMobile(context) ? 16 : 21,
+                        tableHeaderFontSize: Responsive.isTablet(context) ? 18 : Responsive.isMobile(context) ? 16 : 18,
                         listenableStream: appModel.onCurrentUsersChanged,
                         refresh: () async{
 

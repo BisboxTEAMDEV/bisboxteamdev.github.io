@@ -5,8 +5,8 @@ import 'package:giz_admin_dashboard/reusableComponents/constants.dart';
 
 class AppModel extends ChangeNotifier {
 
-  
-  int? _numberOfUsers;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  int? _numberOfUsers = 0;
   bool? _dashboardSelected = true;
   bool? _loading;
   List? _userPerCities;
@@ -21,13 +21,19 @@ class AppModel extends ChangeNotifier {
   final StreamController<Map<String, dynamic>> _currentUsersStreamCtrl = StreamController.broadcast(); // An object listener that listen to any change
   Stream<Map<String, dynamic>> get onCurrentUsersChanged => _currentUsersStreamCtrl.stream; // Getting the value of the listener Object
   void updateCurrentUserUI( newValue ) { _currentUsersStreamCtrl.sink.add( newValue ); notifyListeners();} // Update the value of the listener
-
+  GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
   getNumberOfUsers() => _numberOfUsers;
   getDashboardSelected() => _dashboardSelected;
   getLoading() => _loading;
   getUsersPerCities() => _userPerCities;
   getChartSectionColors() => _chartSectionColors;
 
+  controlMenu() {
+    if ( !_scaffoldKey.currentState!.isDrawerOpen ){
+
+      _scaffoldKey.currentState!.openDrawer();
+    }
+  }
   updateUsersPerCities( newValue ) {
 
     _userPerCities = newValue;

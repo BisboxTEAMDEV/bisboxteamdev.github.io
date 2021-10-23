@@ -27,7 +27,7 @@ class InfoCard extends StatelessWidget {
               ),
               child: Icon(
                 Icons.person,
-                color: Colors.black45,
+                color: Colors.black,
               ),
             ),
           ],
@@ -37,15 +37,16 @@ class InfoCard extends StatelessWidget {
           "Users",
           style: TextStyle(
             fontSize: 18,
-            fontWeight: FontWeight.bold
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
 
         Text(
-          "Total users: ${totalUsers == "null" ? "..." : totalUsers}",
+          "Total users: ${totalUsers == "null" ? totalUsers : totalUsers}",
           style: TextStyle(
 
-            // fontSize: 16,
+            color: Colors.white,
             fontWeight: FontWeight.w400
           ),
         )

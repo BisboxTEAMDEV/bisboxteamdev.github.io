@@ -21,7 +21,11 @@ class ChartsSection extends StatelessWidget {
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: secondaryColor,
-        borderRadius: BorderRadius.all(Radius.circular(16.0))
+        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+        border: Border.all(
+          width: 1,
+          color: sblueColor
+        )
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

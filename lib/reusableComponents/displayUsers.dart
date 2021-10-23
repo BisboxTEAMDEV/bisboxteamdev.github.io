@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giz_admin_dashboard/model/appModel.dart';
+import 'package:giz_admin_dashboard/responsive.dart';
 import 'package:giz_admin_dashboard/reusableComponents/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +9,7 @@ class DisplayUsers extends StatelessWidget {
   VoidCallback? refresh;
   double width;
   double tableHeaderFontSize;
+  ScrollController scrollController = ScrollController();
 
   DisplayUsers({
     Key? key,
@@ -37,14 +39,27 @@ class DisplayUsers extends StatelessWidget {
                 "All users",
                 style: TextStyle(
                   fontSize: 32,
-                  fontWeight: FontWeight.w600
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
                 ),
               ),
 
               ElevatedButton(
-                onPressed: refresh, 
+                onPressed: refresh,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(blueColor),
+                  padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(16)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0)
+                    )
+                  )
+                ),
                 child: Text(
-                  "Refresh"
+                  "Refresh",
+                  style: TextStyle(
+                    color: Colors.black
+                  ),
                 )
               )
             ],
@@ -86,24 +101,31 @@ class DisplayUsers extends StatelessWidget {
                       return Text( "No users" );
 
                     } else {
+
+                      DataTable dataTable = DataTable(
+                        horizontalMargin: 0,
+                        columnSpacing: 16,
+                        columns: [
+                          tableHeader( "Full name", tableHeaderFontSize ),
+                          tableHeader( "Phone number", tableHeaderFontSize ),
+                          tableHeader( "Gender", tableHeaderFontSize ),
+                          tableHeader( "Age group", tableHeaderFontSize ),
+                          tableHeader( "Locality", tableHeaderFontSize ),
+                          tableHeader( "Country", tableHeaderFontSize ),
+                        ], 
+                        rows: List.generate(
+                          snapshot.data!["counts"], 
+                          (index) => usersInfo(snapshot.data!["users"][index]))
+                      );
                       
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                          horizontalMargin: 0,
-                          columnSpacing: 16.0,
-                          columns: [
-                            tableHeader( "Full name", tableHeaderFontSize ),
-                            tableHeader( "Phone number", tableHeaderFontSize ),
-                            tableHeader( "Gender", tableHeaderFontSize ),
-                            tableHeader( "Age group", tableHeaderFontSize ),
-                            tableHeader( "Locality", tableHeaderFontSize ),
-                            tableHeader( "Country", tableHeaderFontSize ),
-                          ], 
-                          rows: List.generate(
-                            snapshot.data!["counts"], 
-                            (index) => usersInfo(snapshot.data!["users"][index]))
+                      return Responsive(
+                        mobile: SingleChildScrollView(
+                          controller: scrollController,
+                          scrollDirection: Axis.horizontal,
+                          child: dataTable
                         ),
+
+                        desktop: dataTable
                       );
                     }
           
@@ -140,32 +162,56 @@ class DisplayUsers extends StatelessWidget {
     );
   }
 
-  DataColumn tableTitle( columTitle ) {
-    return DataColumn(
-      label: Text(columTitle.toString())
-    );
-  }
-
   DataRow usersInfo( userInfo ) {
     return DataRow(
       cells: [
         DataCell(
-          Text(userInfo["fullname"].toString())
+          Text(
+            userInfo["fullname"].toString(),
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          )
         ),
         DataCell(
-          Text(userInfo["phone"].toString())
+          Text(
+            userInfo["phone"].toString(),
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          )
         ),
         DataCell(
-          Text(userInfo["gender"].toString())
+          Text(
+            userInfo["gender"].toString(),
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          )
         ),
         DataCell(
-          Text(userInfo["ageGroup"].toString())
+          Text(
+            userInfo["ageGroup"].toString(),
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          )
         ),
         DataCell(
-          Text(userInfo["locality"].toString())
+          Text(
+            userInfo["locality"].toString(),  
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          )
         ),
         DataCell(
-          Text(userInfo["country"].toString())
+          Text(
+            userInfo["country"].toString(),
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          )
         ),
       ]
     );
