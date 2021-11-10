@@ -17,8 +17,16 @@ class DashboardController {
     var response;
     try {
       response = await ApiServices.getAllUsers();
-      Provider.of<AppModel>(GlobalContext.navigatorKey.currentContext!, listen: false).updateNumberOfUsers( response["counts"]);
       Provider.of<AppModel>(GlobalContext.navigatorKey.currentContext!, listen: false).updateCurrentUserUI( response );
+
+      if ( response["success"] ) {
+
+        Provider.of<AppModel>(GlobalContext.navigatorKey.currentContext!, listen: false).updateNumberOfUsers( response["counts"]);
+        
+      } else {
+
+        return response;
+      }
       
     } on SocketException {
 

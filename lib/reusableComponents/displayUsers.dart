@@ -96,36 +96,49 @@ class DisplayUsers extends StatelessWidget {
           
                   } else if (snapshot.hasData) {
 
-                    if ( snapshot.data!["counts"] == 0 ) {
+                    if ( snapshot.data!["success"] ) {
 
-                      return Text( "No users" );
+                      if ( snapshot.data!["counts"] == 0 ) {
+
+                        return Text( "No users" );
+
+                      } 
+                      else {
+
+                        DataTable dataTable = DataTable(
+                          horizontalMargin: 0,
+                          columnSpacing: 16,
+                          columns: [
+                            tableHeader( "Full name", tableHeaderFontSize ),
+                            tableHeader( "Phone number", tableHeaderFontSize ),
+                            tableHeader( "Gender", tableHeaderFontSize ),
+                            tableHeader( "Age group", tableHeaderFontSize ),
+                            tableHeader( "Locality", tableHeaderFontSize ),
+                            tableHeader( "Country", tableHeaderFontSize ),
+                          ], 
+                          rows: List.generate(
+                            snapshot.data!["counts"], 
+                            (index) => usersInfo(snapshot.data!["users"][index]))
+                        );
+                        
+                        return Responsive(
+                          mobile: SingleChildScrollView(
+                            controller: scrollController,
+                            scrollDirection: Axis.horizontal,
+                            child: dataTable
+                          ),
+
+                          desktop: dataTable
+                        );
+                      }
 
                     } else {
 
-                      DataTable dataTable = DataTable(
-                        horizontalMargin: 0,
-                        columnSpacing: 16,
-                        columns: [
-                          tableHeader( "Full name", tableHeaderFontSize ),
-                          tableHeader( "Phone number", tableHeaderFontSize ),
-                          tableHeader( "Gender", tableHeaderFontSize ),
-                          tableHeader( "Age group", tableHeaderFontSize ),
-                          tableHeader( "Locality", tableHeaderFontSize ),
-                          tableHeader( "Country", tableHeaderFontSize ),
-                        ], 
-                        rows: List.generate(
-                          snapshot.data!["counts"], 
-                          (index) => usersInfo(snapshot.data!["users"][index]))
-                      );
-                      
-                      return Responsive(
-                        mobile: SingleChildScrollView(
-                          controller: scrollController,
-                          scrollDirection: Axis.horizontal,
-                          child: dataTable
+                      return Text(
+                        "${snapshot.data!["message"]}. Please login",
+                        style: TextStyle(
+                          color: Colors.white
                         ),
-
-                        desktop: dataTable
                       );
                     }
           

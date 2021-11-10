@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giz_admin_dashboard/responsive.dart';
 import 'package:giz_admin_dashboard/reusableComponents/constants.dart';
+import 'package:giz_admin_dashboard/reusableMethods/localStorageController.dart';
 
 class ProfileCard extends StatelessWidget {
   const ProfileCard({
@@ -23,9 +24,9 @@ class ProfileCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Image.asset(
-            "assets/relaxed.png",
-            height: 24,
+          Icon(
+            Icons.person,
+            color: Colors.black,
           ),
           if ( !Responsive.isMobile(context) )
             Padding(
@@ -33,10 +34,11 @@ class ProfileCard extends StatelessWidget {
                 horizontal: 8
               ),
               child: Text(
-                "Smiley",
+                LocalStorageController().getStoredInfo()["fullname"],
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.black
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600
                 ),
               ),
             ),
